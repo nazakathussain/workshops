@@ -1,0 +1,25 @@
+stages:
+- stage: Deploy
+  displayName: 'Deploy stage'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: 'Deploy'
+    environment: 'production'
+    pool:
+      vmImage: 'ubuntu-latest'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: none # Skip checking out repo to speed up the job
+
+          - task: AzureResourceGroupDeployment@2
+            inputs:
+              azureSubscription: '$(azureSubscription)'
+              resourceGroupName: '$(resourceGroupName)'
+              location: 'West US'
+              templateLocation: 'Linked artifact'
+              csmFile: 'templates/arm-template.json'
+              overrideParameters: '-functionAppName "$(functionAppName)"'
+              deploymentMode: 'Incremental'

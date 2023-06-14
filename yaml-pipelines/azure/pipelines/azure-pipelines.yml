@@ -1,0 +1,22 @@
+trigger:
+  - main
+  
+variables:
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: '<Azure-Subscription>'
+
+  # Function app name
+  functionAppName: '<Your-Function-App-Name>'
+
+  # Azure Resource group name
+  resourceGroupName: '<Your-Resource-Group-Name>'
+
+  # Python version
+  pythonVersion: '3.x'
+
+  # Working Directory
+  workingDirectory: '$(System.DefaultWorkingDirectory)/'
+
+stages:
+- template: build-stage.yml  # Template reference
+- template: deploy-stage.yml  # Template reference

@@ -1,0 +1,27 @@
+stages:
+- stage: Build
+  displayName: 'Build stage'
+  jobs:
+  - job: Build
+    displayName: 'Build'
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+        addToPath: true
+
+    - script: |
+        python -m venv builderenv
+        source builderenv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+      displayName: 'Install dependencies'
+      workingDirectory: $(workingDirectory)
+
+    - script: |
+        source builderenv/bin/activate
+        func azure functionapp publish $(functionAppName) --python
+      displayName: 'Azure functions publish'
+      workingDirectory: $(workingDirectory)
