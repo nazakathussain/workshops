@@ -19,4 +19,5 @@ variables:
 
 stages:
 - template: build-stage.yml  # Template reference
+
 - template: deploy-stage.yml  # Template reference
